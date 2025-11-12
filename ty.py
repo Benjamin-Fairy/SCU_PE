@@ -12,7 +12,7 @@ tsession=requests.session()
 
 def get_various(uid: str):
   
-    head = json.loads(head = os.getenv("H1"))
+    head = json.loads(os.getenv("H1"))
 
     d = {"uid": uid}
     api_url = "http://211.83.159.5/tyexam/api/l/v6/token?"
@@ -20,7 +20,7 @@ def get_various(uid: str):
     res = tsession.post(api_url, headers=head, data=d).text
     cgAuth = json.loads(res)["data"]
 
-    head = json.loads(head = os.getenv("H2"))
+    head = json.loads(os.getenv("H2"))
 
     page_url = " http://211.83.159.5/tyexam/app/"
 
@@ -28,7 +28,7 @@ def get_various(uid: str):
 
     Cookie = json.loads(str(res).replace("'", '"'))["Set-Cookie"].split(";")[0]
 
-    header = json.loads(head = os.getenv("HP"))
+    header = json.loads(os.getenv("HP"))
 
     header["Cookie"]=Cookie
     header["cgAuthorization"]=cgAuth
