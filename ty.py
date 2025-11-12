@@ -135,12 +135,10 @@ def main() -> None:
             print(tkid, "已成功获取!")
         res=htmlAnalys(ans)
         librec = {}
-        with open("tylib2.json", "r", encoding="utf-8-sig") as fp:
+        with open(f"题库/{tkname}.json", "r", encoding="utf-8-sig") as fp:
             librec = json.loads(fp.read())
-        if tkname not in librec:
-            librec[tkname]={}
-        librec[tkname].update(res)
-        with open("tylib2.json", "w+", encoding="utf-8-sig") as fp:
+        librec.update(res)
+        with open(f"题库/{tkname}.json", "w+", encoding="utf-8-sig") as fp:
             fp.write(json.dumps(librec, ensure_ascii=False, indent=4))
 
 
