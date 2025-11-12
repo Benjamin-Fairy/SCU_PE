@@ -90,7 +90,7 @@ def htmlAnalys(htmlFile: str) -> dict:
         if answers: # 选择题
             right=i.xpath("text()")
             print(right)
-            clean_r = re.findall(r'\t\t\t\t\t\t  ([A-Z]+)\r\n\t\t\t\t\t', str(right[-1]))[0]
+            clean_r = re.findall(r'\t\t\t\t\t\t  ([A-Z]+)\n\t\t\t\t\t', str(right[-1]))[0]
         else:   # 判断题
             right = i.xpath("text()")
             print(right)
