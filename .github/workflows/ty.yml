@@ -10,7 +10,7 @@ on:
     tags:
     - 'v*'
   schedule:
-    - cron: '25 0/1 * * *'
+    - cron: '25 10-21 * * *'
   watch:
     types: [started]
   workflow_dispatch:
