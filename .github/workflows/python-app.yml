@@ -1,0 +1,51 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: PE Test Get
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+    - 'v*'
+  schedule:
+    - cron: '25 0/4 * * *'
+  watch:
+    types: [started]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 start
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+        pip install beautifulsoup4
+        pip install lxml
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Run ty.py
+      env:
+        H1: ${{ secrets.H1 }}
+        H2: ${{ secrets.H2 }}
+        HP: ${{ secrets.HP }}
+        ID: ${{ secrets.ID }}
+      run: |
+        python ty.py
+
+    - name: Push
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "Autoupdate"
+        git push
