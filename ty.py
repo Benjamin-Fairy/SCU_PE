@@ -137,7 +137,12 @@ def main() -> None:
         librec = {}
         with open(f"题库/{tkname}.json", "r", encoding="utf-8-sig") as fp:
             librec = json.loads(fp.read())
-        librec.update(res)
+        for i in librec.keys():
+            for j in res[i].keys():
+                if j in librec[i] and res[i][j] not in librec[i][j]:
+                    librec[i][j].append(res[i][j])
+                if j not in librec[i]:
+                    librec[i][j]=[res[i][j]]
         with open(f"题库/{tkname}.json", "w+", encoding="utf-8-sig") as fp:
             fp.write(json.dumps(librec, ensure_ascii=False, indent=4))
 
