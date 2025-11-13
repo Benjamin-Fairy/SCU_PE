@@ -88,6 +88,8 @@ def htmlAnalys(htmlFile: str) -> dict:
         answers=i.xpath("ul/li/text()")
         types=i.xpath("span/text()")[0].replace("[","").replace("]","")
         if answers: # 选择题
+            for i in range(len(answers)):
+                answers[i]=answers[i].lstrip()
             right=i.xpath("text()")
             clean_r = re.findall(r'\t\t\t\t\t\t  ([A-Z]+)\n\t\t\t\t\t', str(right[-1]))[0]
         else:   # 判断题
