@@ -104,51 +104,49 @@ def main() -> None:
     secret_id = os.getenv("ID")
     get_various(secret_id)
 
-    repeat = 3
-    for _ in range(repeat):
-        new_papers=write_new_paper()
-        for new_paper in new_papers:
-            tkname,tkid=new_paper
-            baseUrl_1 = "http://211.83.159.5/tyexam//app/redir.php?"
-            baseUrl_2 = "&direction=1&tijiao=0&postflag=1&huihuabh=" + \
-                tkid+"&cmd=dati&catalog_id=6&mode=test"
-            ckUrl = "http://211.83.159.5/tyexam//app/redir.php?catalog_id=6&cmd=dajuan_chakan&huihuabh="+tkid+"&mode=test"
-            urlDict = {}
-            ansDict = {}
-            for i in range(0, 10):
-                ansDict[i] = []
-                tempDict = {}
-                for j in range(0, 5):
-                    tempDict["ti_"+str(j+1+i*5)] = 0
-                for k in tempDict:
-                    ansDict[i].append(k+"="+str(tempDict[k]))
-                urlDict["page="+str(i)] = "&".join(ansDict[i])
-    
-            for i in urlDict:
-                resUrl = baseUrl_1+urlDict[i]+"&"+i+baseUrl_2
-                getUrl(resUrl)
-    
-            ans = getUrl(ckUrl)
-    
-            if "考生信息获取失败" in ans:
-                return
-            if "<body>" not in ans:
-                print("Authorization失效，程序退出")
-                exit(0)
-            else:
-                print(tkid, "已成功获取!")
-            res=htmlAnalys(ans)
-            librec = {}
-            with open(f"题库/{tkname}.json", "r", encoding="utf-8-sig") as fp:
-                librec = json.loads(fp.read())
-            for i in librec.keys():
-                for j in res[i].keys():
-                    if j in librec[i] and res[i][j] not in librec[i][j]:
-                        librec[i][j].append(res[i][j])
-                    if j not in librec[i]:
-                        librec[i][j]=[res[i][j]]
-            with open(f"题库/{tkname}.json", "w+", encoding="utf-8-sig") as fp:
-                fp.write(json.dumps(librec, ensure_ascii=False, indent=4))
+    new_papers=write_new_paper()
+    for new_paper in new_papers:
+        tkname,tkid=new_paper
+        baseUrl_1 = "http://211.83.159.5/tyexam//app/redir.php?"
+        baseUrl_2 = "&direction=1&tijiao=0&postflag=1&huihuabh=" + \
+            tkid+"&cmd=dati&catalog_id=6&mode=test"
+        ckUrl = "http://211.83.159.5/tyexam//app/redir.php?catalog_id=6&cmd=dajuan_chakan&huihuabh="+tkid+"&mode=test"
+        urlDict = {}
+        ansDict = {}
+        for i in range(0, 10):
+            ansDict[i] = []
+            tempDict = {}
+            for j in range(0, 5):
+                tempDict["ti_"+str(j+1+i*5)] = 0
+            for k in tempDict:
+                ansDict[i].append(k+"="+str(tempDict[k]))
+            urlDict["page="+str(i)] = "&".join(ansDict[i])
+
+        for i in urlDict:
+            resUrl = baseUrl_1+urlDict[i]+"&"+i+baseUrl_2
+            getUrl(resUrl)
+
+        ans = getUrl(ckUrl)
+
+        if "考生信息获取失败" in ans:
+            return
+        if "<body>" not in ans:
+            print("Authorization失效，程序退出")
+            exit(0)
+        else:
+            print(tkid, "已成功获取!")
+        res=htmlAnalys(ans)
+        librec = {}
+        with open(f"题库/{tkname}.json", "r", encoding="utf-8-sig") as fp:
+            librec = json.loads(fp.read())
+        for i in librec.keys():
+            for j in res[i].keys():
+                if j in librec[i] and res[i][j] not in librec[i][j]:
+                    librec[i][j].append(res[i][j])
+                if j not in librec[i]:
+                    librec[i][j]=[res[i][j]]
+        with open(f"题库/{tkname}.json", "w+", encoding="utf-8-sig") as fp:
+            fp.write(json.dumps(librec, ensure_ascii=False, indent=4))
 
 
 if __name__ == "__main__":
